@@ -4,16 +4,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="style.css">
 <title>JSP Example</title>
 </head>
 <body>
-						<header>
+
+	<form method="post" action="intern/login">
+		<table border="1" width="30%" cellpadding="3">
+			<thead>
+				<tr>
+					<th colspan="2">
 						<%
 							String state = (String) session
 													.getAttribute(Const.SessionAttributs.LoginState.NAME);
 											if (state == null) {
-												out.println("<h1>Welcome back!</h1><br><h2>Login Here</h2>");
+												out.println("Welcome back!<br>Login Here");
 											} else if (state
 													.equals(Const.SessionAttributs.LoginState.Valeus.PASSWORD_WRONG)) {
 												out.println("Password was wrong!<br>Try again");
@@ -25,14 +29,6 @@
 												request.getRequestDispatcher("/intern/a").forward(request,response);
 											}
 						%>
-
-	</header>
-
-	<form method="post" action="intern/login">
-		<table border="1" width="30%" cellpadding="3">
-			<thead>
-				<tr>
-					<th colspan="2">
 
 					</th>
 				</tr>
