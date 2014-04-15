@@ -1,65 +1,87 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@ page import="de.amos.*"%>
 <!DOCTYPE html>
 <html>
+<%System.out.println("called indexpage"); %>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JSP Example</title>
+<title>AMOS project 5</title>
+<link rel="stylesheet" type="text/css" href="styles/style.css">
 </head>
+
 <body>
 
-	<form method="post" action="intern/login">
-		<table border="1" width="30%" cellpadding="3">
-			<thead>
-				<tr>
-					<th colspan="2">
-						<%
-							String state = (String) session
-													.getAttribute(Const.SessionAttributs.LoginState.NAME);
-											if (state == null) {
-												out.println("Welcome back!<br>Login Here");
-											} else if (state
-													.equals(Const.SessionAttributs.LoginState.Valeus.PASSWORD_WRONG)) {
-												out.println("Password was wrong!<br>Try again");
-											} else if (state
-													.equals(Const.SessionAttributs.LoginState.Valeus.NOT_LOGGED_IN)) {
-												out.println("Access denied!<br>Please login");
-											} else if (state
-													.equals(Const.SessionAttributs.LoginState.Valeus.LOGGED_IN)){
-												request.getRequestDispatcher("/intern/a").forward(request,response);
-											}
-						%>
+	<header>
+		<h1>AMOS PROJECT</h1>
+		<h2>Green Energy Cockpit</h2>
+	</header>
 
-					</th>
-				</tr>
-			</thead>
-			<tbody>
+	<div id="gesInhalt">
+
+		<%
+			String state = (String) session.getAttribute(Const.SessionAttributs.LoginState.NAME);
+			if (state == null) { %>
+				<div id="Begruessung">
+					Welcome back to the <i>Green Energy Cockpit</i>.
+				</div>
+		<%	} else if (state.equals(Const.SessionAttributs.LoginState.Valeus.PASSWORD_WRONG)) { %>
+				<div id="Fehlermeldung">
+					Password wrong! Please try again.		
+				</div>
+		<%	} else if (state.equals(Const.SessionAttributs.LoginState.Valeus.NOT_LOGGED_IN)) { %>
+				<div id="Fehlermeldung">
+					Access denied! 			
+				</div>
+		<%	} else if (state.equals(Const.SessionAttributs.LoginState.Valeus.USERNAME_UNKNOWN)) { %>
+				<div id="Fehlermeldung">
+					Username unknown! Register or retry.
+				</div>
+		<%	} else if (state.equals(Const.SessionAttributs.LoginState.Valeus.LOGGED_IN)) { 
+				response.sendRedirect(request.getContextPath()+ Const.URL.INTERN_HOME);
+			} else if (state.equals(Const.SessionAttributs.LoginState.Valeus.FAILURE)) { %>
+				<div id="Fehlermeldung">
+					Systemfailure! Contact Systemadministrator or try again.
+				</div>
+		<%	} %>
+
+
+		
+
+		<div id="Anmeldung">
+			Please login to proceed.
+			<table>
 				<tr>
-					<td>User Name</td>
-					<td><input type="text" name="username" value="" /></td>
-					<td><input type="text" name="<%=Const.RequestParameters.LOGIN_USERNAME %>" value="" /></td>
+					<form method="post" action="login/login">
+					<td>
+						<table>
+							<tr>
+								<td>Name:</td>
+								<td><input type="text"
+									name="<%= Const.RequestParameters.LOGIN_USERNAME %>"></td>
+							</tr>
+							<tr>
+								<td>Password:</td>
+								<td><input type="password"
+									name="<%= Const.RequestParameters.LOGIN_PASSWORD %>"></td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<input type="hidden" name="<%=Const.RequestParameters.COMING_FROM_LOGINPAGE%>" value="true" />
+						<input id="LoginButton" type="submit" value="Login" ></td>
+					</form>
 				</tr>
+
 				<tr>
-					<td>Password</td>
-					<td><input type="password" name="<%=Const.RequestParameters.LOGIN_PASSWORD %>" value="" /></td>
+					<td>Not yet registered?</td>
+					<td>
+						<form method="post" action="login/reg">
+							<input id="RegButton" type="submit" value="Register">
+						</form>
+					</td>
 				</tr>
-				<tr>
-					<td><input type="submit" value="Login" /></td>
-					<td><input type="reset" value="Reset" /></td>
-				</tr>
-				<tr>
-					<td colspan="2">Yet Not Registered? <a href="intern/reg.jsp">Register
-							Here</a></td>
-				</tr>
-			</tbody>
-		</table>
-		<input type="hidden" name="<%=Const.RequestParameters.COMING_FROM_LOGINPAGE %>" value="true"/>
-	</form>
-	<%
-	
-	
-	
-		session.removeAttribute(Const.SessionAttributs.LoginState.NAME);
-	%>
+			</table>
+		</div>
+	</div>
 </body>
 </html>
